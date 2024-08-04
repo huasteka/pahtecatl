@@ -5,7 +5,9 @@ ENV APP_HOME=/home/pahtecatl/app
  
 WORKDIR ${APP_HOME}
 
-COPY . .
+COPY Cargo.* .
+COPY ./config ./config
+COPY ./src ./src
 
 RUN cargo build --release
 
