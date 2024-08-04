@@ -1,0 +1,15 @@
+[services.auth]
+target_service = "http://127.0.0.1"
+target_port = 9071
+
+[services.finance]
+target_service = "http://127.0.0.1"
+target_port = 9073
+
+[services.sales]
+target_service = "http://127.0.0.1"
+target_port = 9074
+
+[services.storage]
+target_service = "http://127.0.0.1"
+target_port = 9072
