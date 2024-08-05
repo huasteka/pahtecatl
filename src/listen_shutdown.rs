@@ -1,5 +1,6 @@
 use salvo::server::ServerHandle;
 use tokio::signal;
+use tracing::info;
 
 pub async fn listen_shutdown(handle: ServerHandle) {
     // Wait shutdown signal
@@ -26,8 +27,8 @@ pub async fn listen_shutdown(handle: ServerHandle) {
     };
 
     tokio::select! {
-      _ = ctrl_c => println!("Ctrl+C signal received"),
-      _ = terminate => println!("Terminate signal received"),
+      _ = ctrl_c => info!("Ctrl+C signal received"),
+      _ = terminate => info!("Terminate signal received"),
     }
 
     handle.stop_graceful(None)

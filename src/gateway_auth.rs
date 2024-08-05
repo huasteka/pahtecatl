@@ -1,19 +1,16 @@
-use reqwest::Client;
+use salvo::proxy::Proxy;
 use salvo::{async_trait, Depot, FlowCtrl, Handler, Request, Response};
-use std::sync::Arc;
+use tracing::instrument::WithSubscriber;
 
-use crate::gateway_t::ApiGatewayService;
 use crate::read_config::GatewayService;
-use crate::redirect_to::redirect_to;
 
 pub struct GatewayAuth {
-    client: Arc<Client>,
     service: GatewayService,
 }
 
-impl ApiGatewayService for GatewayAuth {
-    fn new(client: Arc<Client>, service: GatewayService) -> Self {
-        Self { client, service }
+impl GatewayAuth {
+    pub fn new(service: GatewayService) -> Self {
+        Self { service }
     }
 }
 
@@ -22,10 +19,18 @@ impl Handler for GatewayAuth {
     async fn handle(
         &self,
         req: &mut Request,
-        _depot: &mut Depot,
+        depot: &mut Depot,
         res: &mut Response,
-        _ctrl: &mut FlowCtrl,
+        ctrl: &mut FlowCtrl,
     ) {
-        redirect_to(self.client.clone(), self.service.clone(), req, res).await
+        let request_url = format!(
+            "{}:{}",
+            self.service.target_service, self.service.target_port,
+        );
+
+        Proxy::use_reqwest_client(request_url)
+            .handle(req, depot, res, ctrl)
+            .with_current_subscriber()
+            .await;
     }
 }

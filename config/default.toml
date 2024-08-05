@@ -1,15 +1,15 @@
-[services.auth]
+[proxies.auth]
 target_service = "http://127.0.0.1"
-target_port = 9071
+target_port = 9701
 
-[services.finance]
+[proxies.finance]
 target_service = "http://127.0.0.1"
-target_port = 9073
+target_port = 9703
 
-[services.sales]
+[proxies.sales]
 target_service = "http://127.0.0.1"
-target_port = 9074
+target_port = 9704
 
-[services.storage]
+[proxies.storage]
 target_service = "http://127.0.0.1"
-target_port = 9072
+target_port = 9702

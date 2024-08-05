@@ -10,10 +10,8 @@ license = "GPL-3.0-only"
 [dependencies]
 config = { version = "0.14.0" }
 dotenv = { version = "0.15.0" }
-jsonwebtoken = { version = "9.1" }
-log = { version = "0.4.22" }
 reqwest = { version = "0.12.5", features = ["json"] }
-salvo = { version = "0.68.5", features= ["cors", "jwt-auth"] }
+salvo = { version = "0.68.5", features= ["cors", "logging", "proxy"] }
 serde = { version = "1" }
 serde_derive = { version = "1" }
 tokio = { version = "1", features = ["macros", "signal"] }

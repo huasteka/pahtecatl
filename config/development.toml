@@ -1,0 +1,15 @@
+[proxies.auth]
+target_service = "http://app-auth"
+target_port = 1337
+
+[proxies.finance]
+target_service = "http://app-finance"
+target_port = 9703
+
+[proxies.sales]
+target_service = "http://app-sales"
+target_port = 9704
+
+[proxies.storage]
+target_service = "http://app-storage"
+target_port = 3000

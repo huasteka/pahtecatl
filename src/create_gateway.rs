@@ -14,14 +14,14 @@ pub enum GatewayType {
 }
 
 pub fn create_gateway(
-    gateway_type: String,
+    service_type: String,
     service: GatewayService,
     client: Arc<Client>,
 ) -> Result<GatewayType, Box<dyn Error>> {
     let client = Arc::clone(&client);
 
-    match gateway_type.as_str() {
-        "auth" => Ok(GatewayType::Auth(GatewayAuth::new(client, service))),
+    match service_type.as_str() {
+        "auth" => Ok(GatewayType::Auth(GatewayAuth::new(service))),
         "finance" => Ok(GatewayType::Finance(GatewayFinance::new(client, service))),
         "sales" => Ok(GatewayType::Sales(GatewaySales::new(client, service))),
         "storage" => Ok(GatewayType::Storage(GatewayStorage::new(client, service))),

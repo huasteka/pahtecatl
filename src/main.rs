@@ -12,6 +12,7 @@ use listen_shutdown::listen_shutdown;
 use reqwest::Client;
 use salvo::cors::{AllowOrigin, Cors};
 use salvo::http::Method;
+use salvo::logging::Logger;
 use salvo::prelude::*;
 use std::sync::Arc;
 
@@ -39,22 +40,22 @@ async fn main() {
     let gateway_config = GatewayConfig::new().unwrap();
 
     let client = Arc::new(Client::new());
-    for (service_type, service) in gateway_config.services {
+    for (service_type, service) in gateway_config.proxies {
         let client = client.clone();
         let client_path = format!("{}/<**rest_path>", service_type);
-        let gw_type = create_gateway(service_type.clone(), service, client).unwrap();
+        let gateway_type = create_gateway(service_type.clone(), service, client).unwrap();
 
-        let route = match gw_type {
-            Auth(gw) => Router::with_path(client_path).goal(gw),
-            Finance(gw) => Router::with_path(client_path).goal(gw),
-            Sales(gw) => Router::with_path(client_path).goal(gw),
-            Storage(gw) => Router::with_path(client_path).goal(gw),
+        let route = match gateway_type {
+            Auth(proxy) => Router::with_path(client_path).goal(proxy),
+            Finance(proxy) => Router::with_path(client_path).goal(proxy),
+            Sales(proxy) => Router::with_path(client_path).goal(proxy),
+            Storage(proxy) => Router::with_path(client_path).goal(proxy),
         };
 
         router = router.push(route);
     }
 
-    let service = Service::new(router).hoop(cors);
+    let service = Service::new(router).hoop(cors).hoop(Logger::new());
     let listener = TcpListener::new("0.0.0.0:9705").bind().await;
 
     let server = Server::new(listener);

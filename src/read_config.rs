@@ -2,15 +2,15 @@ use config::{Config, ConfigError, Environment, File};
 use serde_derive::Deserialize;
 use std::{collections::HashMap, env};
 
-#[derive(Clone, Debug, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize)]
 pub struct GatewayService {
     pub target_service: String,
     pub target_port: i32,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Default, Deserialize)]
 pub struct GatewayConfig {
-    pub services: HashMap<String, GatewayService>,
+    pub proxies: HashMap<String, GatewayService>,
 }
 
 impl GatewayConfig {
@@ -20,9 +20,9 @@ impl GatewayConfig {
         let cfg = Config::builder()
             .add_source(File::with_name("config/default"))
             .add_source(File::with_name(&format!("config/{}", app_env)).required(false))
-            .add_source(Environment::with_prefix("app"))
+            .add_source(Environment::with_prefix("proxies").separator("_"))
             .build()?;
-
+        
         cfg.try_deserialize()
     }
 }
