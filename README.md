@@ -23,9 +23,9 @@ __Cargo__ is the dependency manager that is installed together with __Rust__.
 To configure the API service proxy modify `config/default.toml` file:
 
 ```toml
-[proxies.$serviceName]
-target_service = $serviceURL
-target_port = $servicePort
+[proxies.{serviceName}]
+target_service = {serviceURL}
+target_port = {servicePort}
 ```
 
 ## Tests
